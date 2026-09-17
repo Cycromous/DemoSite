@@ -7,6 +7,7 @@ export default function BetaFeatureModule() {
   const isBeta = env.isBetaFeatureEnabled;
   const [simulatedLatency, setSimulatedLatency] = useState<number>(45);
   const [mockTraffic, setMockTraffic] = useState<boolean>(true);
+  const [pingStatus, setPingStatus] = useState<string>("Ready");
 
   if (!isBeta) {
     return (
@@ -27,6 +28,13 @@ export default function BetaFeatureModule() {
       </div>
     );
   }
+
+  const triggerPing = () => {
+    setPingStatus("Pinging edge...");
+    setTimeout(() => {
+      setPingStatus(`Echo received: ${simulatedLatency}ms`);
+    }, 400);
+  };
 
   return (
     <div className="rounded-xl border border-amber-500/30 bg-slate-900/80 p-6 shadow-sm mb-8">
@@ -83,6 +91,19 @@ export default function BetaFeatureModule() {
             onChange={(e) => setSimulatedLatency(Number(e.target.value))}
             className="w-full accent-amber-500 cursor-pointer"
           />
+        </div>
+
+        {/* New Feature: Network Ping Simulator */}
+        <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+          <span className="text-xs text-slate-400 font-mono">
+            Diagnostics: {pingStatus}
+          </span>
+          <button
+            onClick={triggerPing}
+            className="px-3 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs rounded transition-colors cursor-pointer"
+          >
+            Run Ping Test
+          </button>
         </div>
       </div>
     </div>
